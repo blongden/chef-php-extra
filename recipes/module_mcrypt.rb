@@ -23,14 +23,14 @@ if platform?("redhat", "centos", "fedora", "amazon", "scientific")
   include_recipe "yum::ius"
 end
 
-if node['platform_version'].to_f < 6.0
-  if File.exists?("/etc/yum.repos.d/ius.repo")
-      packages = %w{ php53u-mcrypt }
-  else
-      packages = %w{ php-mcrypt }
-  end
+if File.exists?("/etc/yum.repos.d/ius.repo")
+  packages = %w{ php53u-mcrypt }
 else
-  packages = %w{ php-mcrypt }
+  if node['platform_version'].to_f > 6.0
+    packages = %w{ php53-mcrypt }
+  else
+    packages = %w{ php-mcrypt }
+  end
 end
 
 pkgs = value_for_platform(

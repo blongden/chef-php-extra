@@ -19,14 +19,14 @@
 
 include_recipe "chef-php-extra"
 
-if node['platform_version'].to_f < 6.0
-  if File.exists?("/etc/yum.repos.d/ius.repo")
-      packages = %w{ php53u-soap }
-  else
-      packages = %w{ php53-soap }
-  end
+if File.exists?("/etc/yum.repos.d/ius.repo")
+  packages = %w{ php53u-soap }
 else
-  packages = %w{ php-soap }
+  if node['platform_version'].to_f > 6.0
+    packages = %w{ php53-soap }
+  else
+    packages = %w{ php-soap }
+  end
 end
 
 pkgs = value_for_platform(

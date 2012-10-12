@@ -1,7 +1,11 @@
-if node['platform_version'].to_f < 6.0
-  centos_packages = %w{ php53 php53-devel php53-cli php-pear }
+if File.exists?("/etc/yum.repos.d/ius.repo")
+    centos_packages = %w{ php53u php53u-devel php53u-cli php-pear }
 else
-  centos_packages = %w{ php php-devel php-cli php-pear }
+  if node['platform_version'].to_f > 6.0
+    centos_packages = %w{ php53 php53-devel php53-cli php-pear }
+  else
+    centos_packages = %w{ php php-devel php-cli php-pear }
+  end
 end
 
 pkgs = value_for_platform(
